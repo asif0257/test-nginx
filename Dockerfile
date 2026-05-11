@@ -5,4 +5,4 @@ FROM nginx:latest
 # COPY ./index.html /usr/share/nginx/html/index.html
 
 # Expose the port Nginx will serve
-EXPOSE 80
+EXPOSE 8080
