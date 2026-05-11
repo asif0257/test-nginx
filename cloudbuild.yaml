@@ -20,7 +20,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA']
 
-    # Deploy to Cloud Run
+  # Deploy to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
@@ -36,7 +36,7 @@ steps:
     - '--allow-unauthenticated'
 
 images:
-  - 'asia-south1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA''
+  - 'asia-south1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA'
 
 #- name: 'gcr.io/cloud-builders/gcloud'
 #  entrypoint: 'bash'
