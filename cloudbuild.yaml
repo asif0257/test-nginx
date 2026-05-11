@@ -14,11 +14,11 @@ steps:
 
   # Step 1: Build the Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'asia-south1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA', '.']
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA', '.']
 
   # Step 2: Push the Docker image to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'asia-south1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA']
+  args: ['push', 'us-central1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA']
 
   # Deploy to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -28,7 +28,7 @@ steps:
     - 'deploy'
     - 'app1-service'
     - '--image'
-    - 'asia-south1-docker.pkg.dev/gke-arena/my-repo/nginx/nginx-sample:$SHORT_SHA'
+    - 'us-central1-docker.pkg.dev/gke-arena/my-repo/nginx/nginx-sample:$SHORT_SHA'
     - '--region'
     - 'asia-south1'
     - '--platform'
@@ -36,7 +36,7 @@ steps:
     - '--allow-unauthenticated'
 
 images:
-  - 'asia-south1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA'
+  - 'us-central1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA'
 
 #- name: 'gcr.io/cloud-builders/gcloud'
 #  entrypoint: 'bash'
