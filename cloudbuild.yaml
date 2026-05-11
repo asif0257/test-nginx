@@ -14,37 +14,55 @@ steps:
 
   # Step 1: Build the Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:$SHORT_SHA', '.']
+  args: ['build', '-t', 'asia-south1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA', '.']
 
   # Step 2: Push the Docker image to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:$SHORT_SHA']
+  args: ['push', 'asia-south1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA']
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
+    # Deploy to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
   args:
-  - '-c'
-  - |
-    gcloud compute instance-templates create nginxupdate \
-    --machine-type=e2-medium \
-    --network=projects/asif-praveen-gke/global/networks/siri-vpc-network \
-    --subnet=projects/asif-praveen-gke/regions/asia-south1/subnetworks/siri-subnet-1 \
-    --image-family=ubuntu-2004-lts \
-    --image-project=ubuntu-os-cloud \
-    --boot-disk-type=pd-balanced \
-    --boot-disk-size=10GB \
-    --metadata=startup-script-url=gs://pikachu1/startupscript.sh,IMAGE_TAG=$SHORT_SHA \
-    --tags=http-server
+    - 'run'
+    - 'deploy'
+    - 'app1-service'
+    - '--image'
+    - 'asia-south1-docker.pkg.dev/gke-arena/my-repo/nginx/nginx-sample:$SHORT_SHA'
+    - '--region'
+    - 'asia-south1'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+
+images:
+  - 'asia-south1-docker.pkg.dev/my-repo/nginx/nginx-sample:$SHORT_SHA''
+
+#- name: 'gcr.io/cloud-builders/gcloud'
+#  entrypoint: 'bash'
+#  args:
+#  - '-c'
+#  - |
+#    gcloud compute instance-templates create nginxupdate \
+#    --machine-type=e2-medium \
+#    --network=projects/asif-praveen-gke/global/networks/siri-vpc-network \
+#    --subnet=projects/asif-praveen-gke/regions/asia-south1/subnetworks/siri-subnet-1 \
+#    --image-family=ubuntu-2004-lts \
+#    --image-project=ubuntu-os-cloud \
+#    --boot-disk-type=pd-balanced \
+#    --boot-disk-size=10GB \
+#    --metadata=startup-script-url=gs://pikachu1/startupscript.sh,IMAGE_TAG=$SHORT_SHA \
+#    --tags=http-server
 
     # Step 3: Perform a rolling update on the MIG with the new template
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    gcloud compute instance-groups managed rolling-action start-update nginx-mig \
-    --version=template=nginxupdate \
-    --zone=asia-south1-a 
+#- name: 'gcr.io/cloud-builders/gcloud'
+#  entrypoint: 'bash'
+#  args:
+#  - '-c'
+#  - |
+#    gcloud compute instance-groups managed rolling-action start-update nginx-mig \
+#    --version=template=nginxupdate \
+#    --zone=asia-south1-a 
 
    
 # - name: 'gcr.io/cloud-builders/gcloud'
@@ -72,7 +90,7 @@ steps:
 #     --cool-down-period=60 
 
 
-options:
-  logging: CLOUD_LOGGING_ONLY  
+#options:
+#  logging: CLOUD_LOGGING_ONLY  
 
   
