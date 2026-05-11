@@ -33,6 +33,9 @@ steps:
     - 'asia-south1'
     - '--platform'
     - 'managed'
+    - '--allow-unauthenticated'
+    - '--port'
+    - '8080'
 
 images:
   - 'us-central1-docker.pkg.dev/gke-arena/my-repo/nginx/nginx-sample:$SHORT_SHA'
